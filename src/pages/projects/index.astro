@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import { profile } from '../../data/profile';
+import { projects, projectGroups } from '../../data/projects';
+---
+
+<BaseLayout
+  title={`Projects — ${profile.name}`}
+  description="Selected projects across patient management, medical learning platforms, HR management, attendance, and payroll."
+>
+  <header class="page-heading">
+    <p class="eyebrow">Selected projects</p>
+    <h1>
+      Practical software.
+      <br />
+      <em>Real-world applications.</em>
+    </h1>
+    <p>
+      A selection of my work across healthcare, medical education, and workforce
+      management.
+    </p>
+  </header>
+  {projectGroups.map((group) => (
+    <section
+      class="project-group"
+      aria-labelledby={`group-${group.toLowerCase().replaceAll(/[^a-z]+/g, '-')}`}
+    >
+      <h2 id={`group-${group.toLowerCase().replaceAll(/[^a-z]+/g, '-')}`}>
+        {group}
+      </h2>
+      <div class="project-list">
+        {projects
+          .filter((project) => project.group === group)
+          .map((project) => (
+            <ProjectCard project={project} />
+          ))}
+      </div>
+    </section>
+  ))}
+  <ContactCTA />
+</BaseLayout>
+<style>
+  em {
+    color: var(--accent);
+  }
+  .project-group {
+    border-top: 1px solid var(--border);
+    padding-block: 2.5rem 1rem;
+  }
+  .project-group h2 {
+    margin-bottom: 1.75rem;
+  }
+  .project-list > :global(article:last-child) {
+    border-bottom: 0;
+  }
+</style>

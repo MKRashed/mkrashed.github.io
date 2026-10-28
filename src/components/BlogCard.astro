@@ -1,0 +1,63 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, readingTime } from '../lib/blog';
+interface Props {
+  post: CollectionEntry<'blog'>;
+  headingLevel?: 2 | 3;
+}
+const { post, headingLevel = 3 } = Astro.props;
+const Heading = headingLevel === 2 ? 'h2' : 'h3';
+---
+
+<article>
+  <p class="meta">
+    <time datetime={post.data.pubDate.toISOString()}>
+      {formatDate(post.data.pubDate)}
+    </time>
+    <span aria-hidden="true"> · </span>
+    {readingTime(post)}
+  </p>
+  <Heading class="post-title">
+    <a href={`/blog/${post.id}`}>
+      {post.data.title} <span aria-hidden="true">↗</span>
+    </a>
+  </Heading>
+  <p class="summary">{post.data.description}</p>
+  <ul class="tags" aria-label="Tags">
+    {post.data.tags.map((tag) => (
+      <li>
+        <a href={`/blog/tags/${encodeURIComponent(tag)}`}>{tag}</a>
+      </li>
+    ))}
+  </ul>
+</article>
+<style>
+  article {
+    padding-block: 1.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  article:first-child {
+    padding-top: 0;
+  }
+  .meta {
+    font: 0.7rem var(--mono);
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+  .post-title {
+    font: 550 1.1rem/1.5 var(--sans);
+    letter-spacing: normal;
+  }
+  .post-title a {
+    text-decoration: none;
+  }
+  .post-title span {
+    color: var(--accent);
+    margin-left: 0.5rem;
+  }
+  .summary {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+  }
+</style>

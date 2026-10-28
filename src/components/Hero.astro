@@ -1,0 +1,90 @@
+---
+import { profile, experience } from '../data/profile';
+import AmbientScene from './AmbientScene.astro';
+---
+
+<section id="home" class="hero" aria-labelledby="hero-heading">
+  <p class="location">{profile.location}</p>
+  <h1 id="hero-heading">
+    {profile.name}
+    <span aria-hidden="true">.</span>
+  </h1>
+  <p class="role">
+    {profile.title} at {experience[0].company}.
+  </p>
+  <p id="about" class="introduction">
+    {profile.introduction}
+  </p>
+  <div class="hero-footer">
+    <div class="link-row">
+      <a href="/about">
+        More about me <span aria-hidden="true">→</span>
+      </a>
+      <a href={profile.github}>
+        GitHub <span aria-hidden="true">↗</span>
+      </a>
+      <a href={profile.linkedin}>
+        LinkedIn <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <AmbientScene />
+  </div>
+</section>
+<style>
+  .hero {
+    position: relative;
+    padding-block: 5.5rem 4rem;
+  }
+  .location {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+  h1 {
+    margin-block: 1rem;
+    font-size: clamp(2.5rem, 5.5vw, 3.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.04em;
+  }
+  h1 span {
+    color: var(--accent);
+  }
+  .role {
+    font-size: 1.05rem;
+  }
+  .introduction {
+    margin-top: 1rem;
+    color: var(--muted);
+    max-width: 59ch;
+    font-size: 0.95rem;
+    line-height: 1.85;
+  }
+  .link-row {
+    gap: 1.5rem;
+    font-size: 0.8rem;
+  }
+  .hero-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.75rem;
+  }
+  @media (max-width: 1239px) {
+    .hero-footer .link-row {
+      column-gap: 1.25rem;
+      row-gap: 0.75rem;
+    }
+  }
+  .link-row a {
+    text-decoration: none;
+  }
+  .link-row span {
+    margin-left: 0.25rem;
+    color: var(--accent);
+  }
+  @media (max-width: 700px) {
+    .hero {
+      padding-block: 3.5rem 3rem;
+    }
+  }
+</style>

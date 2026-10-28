@@ -1,0 +1,120 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { profile } from '../../data/profile';
+import { projects, type Project } from '../../data/projects';
+export const getStaticPaths = (() =>
+  projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }))) satisfies GetStaticPaths;
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+---
+
+<BaseLayout
+  title={`${project.title} — ${profile.name}`}
+  description={project.summary}
+  noindex={project.status === 'TODO'}
+>
+  <header class="page-heading">
+    <a class="text-link" href="/projects">
+      ← All projects
+    </a>
+    <p class="eyebrow status">
+      {project.status === 'TODO'
+        ? 'TODO / Case study pending'
+        : project.category}
+    </p>
+    <h1>{project.title}</h1>
+    <p>{project.summary}</p>
+  </header>
+  {project.status === 'TODO' && (
+    <aside class="empty-state">
+      <h2 class="placeholder-heading">
+        Project information has not been added yet.
+      </h2>
+      <p>
+        This is a placeholder, not a published project. The sections below
+        identify the details needed for a complete case study.
+      </p>
+    </aside>
+  )}
+  {(project.live || project.portal) && (
+    <nav class="project-destinations link-row" aria-label="Project links">
+      {project.live && (
+        <a href={project.live} target="_blank" rel="noopener noreferrer">
+          Visit website <span aria-hidden="true">↗</span>
+          <span class="new-tab"> (new tab)</span>
+        </a>
+      )}
+      {project.portal && (
+        <a href={project.portal} target="_blank" rel="noopener noreferrer">
+          Open HRM portal <span aria-hidden="true">↗</span>
+          <span class="new-tab"> (new tab)</span>
+        </a>
+      )}
+    </nav>
+  )}
+  <div class="prose case-study">
+    <section>
+      <h2>The problem</h2>
+      <p>{project.problem}</p>
+    </section>
+    <section>
+      <h2>The solution</h2>
+      <p>{project.solution}</p>
+    </section>
+    <section>
+      <h2>Technology stack</h2>
+      {project.technologies.length ? (
+        <ul class="tags">
+          {project.technologies.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>TODO: Add the technologies used on this project.</p>
+      )}
+    </section>
+    <section>
+      <h2>Contribution & technical decisions</h2>
+      <p>
+        {project.challenges ??
+          'TODO: Add my specific contribution, implementation challenges, and technical decisions for this project.'}
+      </p>
+    </section>
+    {project.github && (
+      <section>
+        <h2>Explore the project</h2>
+        <div class="link-row">
+          {project.github && <a href={project.github}>Source on GitHub ↗</a>}
+        </div>
+      </section>
+    )}
+  </div>
+</BaseLayout>
+<style>
+  .project-destinations {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+  .new-tab {
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+  .placeholder-heading {
+    font: 550 1.1rem/1.5 var(--sans);
+    letter-spacing: normal;
+    margin-bottom: 0.5rem;
+  }
+  .status {
+    margin-top: 2.5rem;
+  }
+  .case-study {
+    padding-block: 1rem 5rem;
+  }
+</style>

@@ -1,0 +1,40 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1200"
+  height="630"
+  viewBox="0 0 1200 630"
+>
+  <rect width="1200" height="630" fill="#faf9f5" />
+  <path d="M80 120h1040M80 510h1040" stroke="#dfe3d9" />
+  <text x="80" y="90" font-family="Georgia,serif" font-size="40" fill="#46664f">
+    ri.
+  </text>
+  <text
+    x="80"
+    y="270"
+    font-family="Georgia,serif"
+    font-size="82"
+    fill="#29342e"
+  >
+    Rashedul Islam
+  </text>
+  <text
+    x="80"
+    y="365"
+    font-family="Georgia,serif"
+    font-style="italic"
+    font-size="62"
+    fill="#46664f"
+  >
+    Senior Software Engineer
+  </text>
+  <text
+    x="80"
+    y="565"
+    font-family="Georgia,serif"
+    font-size="24"
+    fill="#68716a"
+  >
+    Thoughtful code. Practical solutions.
+  </text>
+</svg>

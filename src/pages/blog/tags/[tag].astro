@@ -1,0 +1,49 @@
+---
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BlogCard from '../../../components/BlogCard.astro';
+import { profile } from '../../../data/profile';
+import { getPublishedPosts } from '../../../lib/blog';
+export const getStaticPaths = (async () => {
+  const posts = await getPublishedPosts();
+  return [...new Set(posts.flatMap((post) => post.data.tags))].map((tag) => ({
+    params: { tag },
+    props: { tag, posts: posts.filter((post) => post.data.tags.includes(tag)) },
+  }));
+}) satisfies GetStaticPaths;
+interface Props {
+  tag: string;
+  posts: CollectionEntry<'blog'>[];
+}
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout
+  title={`${tag} articles — ${profile.name}`}
+  description={`Articles tagged ${tag} by ${profile.name}.`}
+>
+  <header class="page-heading">
+    <a class="text-link" href="/blog">
+      ← All articles
+    </a>
+    <h1>{tag}</h1>
+    <p>
+      {posts.length} {posts.length === 1 ? 'article' : 'articles'} with this
+      tag.
+    </p>
+  </header>
+  <section aria-label={`Articles tagged ${tag}`} class="tag-posts">
+    {posts.map((post) => (
+      <BlogCard post={post} headingLevel={2} />
+    ))}
+  </section>
+</BaseLayout>
+<style>
+  .tag-posts {
+    padding-bottom: 5rem;
+  }
+  h1 {
+    overflow-wrap: anywhere;
+  }
+</style>

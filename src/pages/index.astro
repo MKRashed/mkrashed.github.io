@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import SkillCard from '../components/SkillCard.astro';
+import ExperienceItem from '../components/ExperienceItem.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import BlogCard from '../components/BlogCard.astro';
+import ContactCTA from '../components/ContactCTA.astro';
+import { experience } from '../data/profile';
+import { featuredProjects } from '../data/projects';
+import { getPublishedPosts } from '../lib/blog';
+const posts = (await getPublishedPosts()).slice(0, 3);
+---
+
+<BaseLayout>
+  <Hero />
+  <section id="work" class="section section-grid">
+    <SectionTitle title="Selected work" />
+    <div class="section-body">
+      {featuredProjects.map((project) => (
+        <ProjectCard project={project} />
+      ))}
+      <a class="text-link" href="/projects">
+        View projects <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+  <section id="skills" class="section section-grid">
+    <SectionTitle title="Technologies" />
+    <SkillCard />
+  </section>
+  <section id="experience" class="section section-grid">
+    <SectionTitle title="Experience" />
+    <div class="section-body">
+      {experience.map((job) => (
+        <ExperienceItem job={job} compact />
+      ))}
+      <a class="text-link" href="/about">
+        More about my journey <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+  {posts.length > 0 && (
+    <section class="section section-grid">
+      <SectionTitle title="Writing" />
+      <div class="section-body">
+        {posts.map((post) => (
+          <BlogCard post={post} />
+        ))}
+        <a class="text-link" href="/blog">
+          All articles →
+        </a>
+      </div>
+    </section>
+  )}
+  <ContactCTA />
+</BaseLayout>

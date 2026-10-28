@@ -1,0 +1,102 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import { profile } from '../data/profile';
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/contact', label: 'Contact' },
+];
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header class="container site-header">
+  <a class="brand" href="/" aria-label={`${profile.name}, home`}>
+    {profile.name}
+    <span aria-hidden="true">.</span>
+  </a>
+  <div class="navigation">
+    <nav aria-label="Main navigation">
+      {links.map(({ href, label }) => (
+        <a
+          href={href}
+          aria-current={
+            (href === '/' ? pathname === '/' : pathname.startsWith(href))
+              ? 'page'
+              : undefined
+          }
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+    <ThemeToggle />
+  </div>
+</header>
+<style>
+  .site-header {
+    min-height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+  }
+  .brand {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    letter-spacing: -0.035em;
+    text-decoration: none;
+    line-height: 1;
+    padding-right: 0.2em;
+  }
+  .brand span {
+    color: var(--accent);
+  }
+  .navigation,
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  nav a {
+    font-size: 0.8rem;
+    text-decoration: none;
+    color: var(--muted);
+    padding-block: 0.75rem;
+  }
+  nav a[aria-current] {
+    color: var(--fg);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 0.65rem;
+  }
+  nav a:hover {
+    color: var(--accent);
+  }
+  @media (max-width: 700px) {
+    .site-header {
+      min-height: 0;
+      gap: 0.75rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      padding-block: 1.5rem 0.5rem;
+    }
+    .navigation {
+      display: contents;
+    }
+    nav {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      flex-wrap: wrap;
+      gap: 0.15rem 1.5rem;
+    }
+    nav a {
+      font-size: 0.75rem;
+      padding-block: 0.5rem;
+    }
+    .brand {
+      font-size: 1.15rem;
+    }
+  }
+</style>

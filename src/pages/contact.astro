@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { profile } from '../data/profile';
+---
+
+<BaseLayout
+  title={`Contact — ${profile.name}`}
+  description="Connect with Rashedul Islam about software engineering, business applications, and collaboration. Email, LinkedIn, and GitHub."
+>
+  <header class="page-heading">
+    <p class="eyebrow">An open conversation</p>
+    <h1>
+      Let’s build
+      <br />
+      <em>something useful.</em>
+    </h1>
+    <p>
+      I’m happy to connect about software engineering, interesting challenges,
+      and collaboration.
+    </p>
+  </header>
+  <section class="section section-grid" aria-labelledby="contact-title">
+    <div>
+      <h2 id="contact-title">Say hello.</h2>
+      <p class="location">Based in {profile.location}.</p>
+    </div>
+    <dl>
+      <div>
+        <dt>Email</dt>
+        <dd>
+          <a href={`mailto:${profile.email}`}>{profile.email} ↗</a>
+        </dd>
+      </div>
+      <div>
+        <dt>LinkedIn</dt>
+        <dd>
+          <a href={profile.linkedin}>Connect on LinkedIn ↗</a>
+        </dd>
+      </div>
+      <div>
+        <dt>GitHub</dt>
+        <dd>
+          <a href={profile.github}>MKRashed ↗</a>
+        </dd>
+      </div>
+    </dl>
+  </section>
+</BaseLayout>
+<style>
+  em {
+    color: var(--accent);
+  }
+  .location {
+    color: var(--muted);
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+  dl {
+    margin: 0 0 2rem;
+  }
+  dl > div {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 1rem;
+    padding-block: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  dl > div:first-child {
+    padding-top: 0;
+  }
+  dt {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+  dd {
+    margin: 0;
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+  }
+  @media (max-width: 400px) {
+    dl > div {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
+</style>

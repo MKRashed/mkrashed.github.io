@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import SkillCard from '../components/SkillCard.astro';
+import ExperienceItem from '../components/ExperienceItem.astro';
+import ContactCTA from '../components/ContactCTA.astro';
+import { profile, experience } from '../data/profile';
+---
+
+<BaseLayout
+  title={`About — ${profile.name}`}
+  description={`Meet ${profile.name}, a senior software engineer in Dhaka working with PHP, Laravel, and modern frontend technologies.`}
+>
+  <header class="page-heading">
+    <p class="eyebrow">A little about me</p>
+    <h1>
+      Practical by nature.
+      <br />
+      <em>Engineer by craft.</em>
+    </h1>
+    <p>
+      I’m {profile.name}, a {profile.title.toLowerCase()} based in{' '}
+      {profile.location}.
+    </p>
+  </header>
+  <section class="section section-grid">
+    <SectionTitle
+      eyebrow="01 / Introduction"
+      title="Software for everyday problems."
+    />
+    <div class="section-body">
+      <p>{profile.introduction}</p>
+      <p>{profile.biography}</p>
+    </div>
+  </section>
+  <section class="section section-grid">
+    <SectionTitle eyebrow="02 / Experience" title="The journey so far." />
+    <div>
+      {experience.map((job) => (
+        <ExperienceItem job={job} />
+      ))}
+    </div>
+  </section>
+  <section class="section section-grid">
+    <SectionTitle eyebrow="03 / Technologies" title="My working toolkit." />
+    <SkillCard />
+  </section>
+  <section class="section section-grid">
+    <SectionTitle eyebrow="04 / Education" title="The foundations." />
+    <div>
+      <p class="eyebrow">{profile.education.period}</p>
+      <h3 class="degree">{profile.education.degree}</h3>
+      <p class="muted">{profile.education.institution}</p>
+    </div>
+  </section>
+  <section class="section section-grid">
+    <SectionTitle
+      eyebrow="05 / Approach"
+      title="Make it useful. Keep it readable."
+    />
+    <div class="section-body">
+      <p>
+        I focus on understanding the business problem and building a practical
+        solution. Reliable backends, clear interfaces, and readable code are the
+        foundations of how I approach web development.
+      </p>
+      <p>
+        I enjoy the work of improving what already exists: tracing bugs,
+        refining features, and making applications easier to maintain.
+        Collaboration and continued learning are part of that process.
+      </p>
+    </div>
+  </section>
+  <ContactCTA />
+</BaseLayout>
+<style>
+  em {
+    color: var(--accent);
+  }
+  .degree {
+    margin-block: 1rem 0.5rem;
+  }
+</style>

@@ -1,0 +1,82 @@
+---
+import type { experience } from '../data/profile';
+interface Props {
+  job: (typeof experience)[number];
+  compact?: boolean;
+}
+const { job, compact = false } = Astro.props;
+---
+
+<article class:list={{ compact }}>
+  <p class="period">
+    <time datetime={job.start}>{job.period.split(' — ')[0]}</time> —{' '}
+    {job.end ? (
+      <time datetime={job.end}>{job.period.split(' — ')[1]}</time>
+    ) : (
+      'Present'
+    )}
+  </p>
+  <h3>{job.role}</h3>
+  <p class="company">{job.company}</p>
+  {!compact && <p class="detail">{job.detail}</p>}
+</article>
+<style>
+  .compact {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.25rem 1.5rem;
+    padding-block: 1.25rem;
+  }
+  .compact h3 {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  .compact .company {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin: 0;
+  }
+  .compact .period {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: center;
+    font: 0.75rem var(--sans);
+    margin: 0;
+  }
+  @media (max-width: 540px) {
+    .compact {
+      grid-template-columns: 1fr;
+    }
+    .compact .period {
+      grid-column: 1;
+      grid-row: 3;
+      margin-top: 0.35rem;
+    }
+  }
+  article {
+    padding-block: 1.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  article:first-child {
+    padding-top: 0;
+  }
+  .period {
+    font: 0.7rem var(--mono);
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+  .company {
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+    color: var(--accent);
+  }
+  .detail {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-top: 0.75rem;
+  }
+</style>

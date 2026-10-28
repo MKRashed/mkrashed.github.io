@@ -1,0 +1,105 @@
+---
+import type { Project } from '../data/projects';
+interface Props {
+  project: Project;
+  headingLevel?: 2 | 3;
+}
+const { project, headingLevel = 3 } = Astro.props;
+const Heading = headingLevel === 2 ? 'h2' : 'h3';
+---
+
+<article>
+  <div class="heading">
+    <Heading class="project-title">
+      <a href={`/projects/${project.slug}`}>
+        {project.title} <span aria-hidden="true">→</span>
+      </a>
+    </Heading>
+    <span class="eyebrow">
+      {project.status === 'TODO' ? 'TODO / Details pending' : project.category}
+    </span>
+  </div>
+  <p>{project.summary}</p>
+  <div class="project-links">
+    {project.live && (
+      <a
+        href={project.live}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Visit ${project.title} website (opens in a new tab)`}
+      >
+        {new URL(project.live).hostname.replace(/^www\./, '')}{' '}
+        <span aria-hidden="true">↗</span>
+      </a>
+    )}
+    {project.portal && (
+      <a
+        href={project.portal}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Open ${project.title} portal (opens in a new tab)`}
+      >
+        HRM portal <span aria-hidden="true">↗</span>
+      </a>
+    )}
+  </div>
+  {project.technologies.length > 0 && (
+    <ul class="tags">
+      {project.technologies.map((item) => (
+        <li>{item}</li>
+      ))}
+    </ul>
+  )}
+</article>
+<style>
+  .project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.85rem;
+    font-size: 0.75rem;
+  }
+  .project-links a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .project-links a:hover {
+    text-decoration: underline;
+  }
+  .eyebrow {
+    font: 0.7rem var(--sans);
+    letter-spacing: normal;
+    text-transform: none;
+  }
+  article {
+    padding-block: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+  article:first-child {
+    padding-top: 0;
+  }
+  .heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+  .project-title {
+    font: 500 1rem/1.5 var(--sans);
+    letter-spacing: normal;
+  }
+  .project-title a {
+    text-decoration: none;
+  }
+  .project-title span {
+    display: inline-block;
+    margin-left: 0.5rem;
+    color: var(--accent);
+  }
+  article > p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+  }
+</style>

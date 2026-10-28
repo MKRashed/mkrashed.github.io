@@ -1,0 +1,23 @@
+{
+  "name": "rashedul-astro-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "format": "prettier --write src public/*.svg astro.config.mjs package.json tsconfig.json README.md",
+    "format:check": "prettier --check src public/*.svg astro.config.mjs package.json tsconfig.json README.md"
+  },
+  "dependencies": {
+    "astro": "^7.4.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.2",
+    "typescript": "^6.0.3"
+  }
+}

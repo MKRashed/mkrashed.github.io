@@ -1,0 +1,48 @@
+---
+import { profile } from '../data/profile';
+---
+
+<section
+  id="contact"
+  class="section contact-cta"
+  aria-labelledby="contact-heading"
+>
+  <div>
+    <h2 id="contact-heading">Let’s connect.</h2>
+    <p>Have a question, an idea, or a project in mind?</p>
+  </div>
+  <a href={`mailto:${profile.email}`}>
+    Say hello <span aria-hidden="true">↗</span>
+  </a>
+</section>
+<style>
+  .contact-cta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-top: 0.6rem;
+  }
+  a {
+    font-size: 0.85rem;
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--accent);
+  }
+  a span {
+    margin-left: 0.5rem;
+  }
+  @media (max-width: 540px) {
+    .contact-cta {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>

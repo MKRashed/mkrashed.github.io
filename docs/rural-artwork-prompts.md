@@ -1,0 +1,11 @@
+# Rural scene update
+
+Generated with built-in image_gen. Alpha-preserving WebP assets saved as `src/assets/ambient/bamboo.webp` and `src/assets/ambient/moon.webp`. These replace the active rooftop and lantern artwork; previous assets remain available as unused originals.
+
+## bamboo
+
+Use case: photorealistic-natural. Asset type: original website footer panorama cutout, very wide 3:1 composition. A quiet rural Bangladesh bamboo grove, realistic fine art landscape matte painting with photographic material detail. Dense graceful clusters of tall segmented green bamboo culms and delicate narrow leaves frame the far left and far right, bending gently inward, with a lower distant bamboo thicket and softly textured grassy earth along the bottom center. A narrow winding earthen footpath leads into the center between bamboo clusters. Rural Bengali village atmosphere, peaceful, understated, no buildings, no rooftops, no water tanks, no people. Muted natural olive and sage green, softly lit with cool dusk ambient light and subtle warm highlights, authentic bark nodes, leaf veins, atmospheric depth. Upper middle and all sky above the organic uneven leaf canopy MUST be genuinely alpha transparent, NOT a solid sky. Foreground reaches the full bottom edge and both side edges. Taller foliage toward edges, open low central horizon for a reading-focused website. No moon, no stars, no painted fireflies, no text, no watermark, no border, no graphic outlines or cartoon. Actual transparent cutout of trees and land, preserve fine leaf edges.
+
+## moon
+
+Use case: photorealistic-natural. Asset type: transparent website night-sky accent, square composition. A single beautiful waxing gibbous moon, about 80 percent illuminated, centered with full circular silhouette inside frame and generous transparent margin all around. Realistic lunar maria, softly detailed craters and subtly warm ivory moonlight, physically plausible terminator shadow on right side, restrained photographic astronomy realism. Moon occupies 68 percent of canvas width. Genuine transparent background outside the moon silhouette. No stars, no clouds, no sky rectangle, no external painted glow, no text or border. Matte delicate contrast, elegant and quiet, not cartoon, not vector, not a planet.

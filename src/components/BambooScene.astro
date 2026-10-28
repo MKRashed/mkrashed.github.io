@@ -1,0 +1,221 @@
+---
+import { Image } from 'astro:assets';
+import bamboo from '../assets/ambient/bamboo-photo.webp';
+import daylight from '../assets/ambient/bamboo-day.webp';
+import sunset from '../assets/ambient/bamboo-sunset.webp';
+---
+
+<div class="bamboo-scene" data-motion-viewport>
+  <div class="bamboo-stage" aria-hidden="true">
+    <Image
+      class="bamboo-art bamboo-night"
+      src={bamboo}
+      alt=""
+      widths={[960, 1600, 2172]}
+      sizes="(max-width: 960px) 960px, 100vw"
+      loading="lazy"
+      decoding="async"
+    />
+    <Image
+      class="bamboo-art bamboo-day"
+      src={daylight}
+      alt=""
+      widths={[960, 1600, 2172]}
+      sizes="(max-width: 960px) 960px, 100vw"
+      loading="lazy"
+      decoding="async"
+    />
+    <Image
+      class="bamboo-art bamboo-sunset"
+      src={sunset}
+      alt=""
+      widths={[960, 1600, 2172]}
+      sizes="(max-width: 960px) 960px, 100vw"
+      loading="lazy"
+      decoding="async"
+    />
+    <svg
+      class="bamboo-atmosphere"
+      viewBox="0 0 2172 724"
+      fill="none"
+      aria-hidden="true"
+    >
+      <g class="bamboo-fireflies" fill="#f4d78e">
+        {[
+          [355, 560],
+          [480, 610],
+          [1600, 545],
+          [1700, 580],
+        ].map(([x, y], index) => (
+          <g
+            class="bamboo-firefly"
+            style={`--delay: ${-index * 3}s; --duration: ${10 + index * 2}s`}
+          >
+            <circle cx={x} cy={y} r="9" opacity=".06" />
+            <circle cx={x} cy={y} r="2" opacity=".7" />
+          </g>
+        ))}
+      </g>
+      <g class="sky-birds" fill="currentColor">
+        {[0, 1, 2].map((index) => (
+          <g
+            class="bird-route"
+            style={`--delay: ${-index * 9}s; --altitude: ${90 + index * 28}px`}
+          >
+            <g class="bird-wings">
+              <path d="M0 0Q-10-12-24-6-10-6 0 3 10-6 24-6 10-12 0 0Z" />
+            </g>
+          </g>
+        ))}
+      </g>
+    </svg>
+  </div>
+</div>
+<style>
+  :global(.bamboo-scene) {
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    /* Reserve the full panorama height; a capped height cropped the canopy. */
+    height: calc(max(100vw, 960px) / 3 + 48px);
+    overflow: hidden;
+    --bamboo-light: 1;
+    --bamboo-saturation: 1;
+    --night-details: 0;
+  }
+  .bamboo-stage {
+    position: absolute;
+    width: max(100%, 960px);
+    aspect-ratio: 3 / 1;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+  }
+  .bamboo-stage :global(.bamboo-art) {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: brightness(var(--bamboo-light)) saturate(var(--bamboo-saturation));
+    /* Source photographs touch the top edge. Feather them into the page sky. */
+    mask-image: linear-gradient(to bottom, transparent, #000 18%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 18%);
+  }
+  .bamboo-atmosphere {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .bamboo-stage :global(.bamboo-night),
+  .bamboo-stage :global(.bamboo-sunset) {
+    display: none;
+  }
+  :global(html[data-theme='evening']) .bamboo-stage :global(.bamboo-day) {
+    display: none;
+  }
+  :global(html[data-theme='evening']) .bamboo-stage :global(.bamboo-sunset) {
+    display: block;
+  }
+  :global(html[data-theme='night']) .bamboo-stage :global(.bamboo-day) {
+    display: none;
+  }
+  :global(html[data-theme='night']) .bamboo-stage :global(.bamboo-night) {
+    display: block;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(html:not([data-theme])) .bamboo-stage :global(.bamboo-day),
+    :global(html[data-theme='system']) .bamboo-stage :global(.bamboo-day) {
+      display: none;
+    }
+    :global(html:not([data-theme])) .bamboo-stage :global(.bamboo-night),
+    :global(html[data-theme='system']) .bamboo-stage :global(.bamboo-night) {
+      display: block;
+    }
+  }
+
+  .bamboo-fireflies {
+    opacity: var(--night-details);
+  }
+  .bamboo-firefly {
+    animation: bamboo-firefly var(--duration) ease-in-out var(--delay) infinite
+      alternate;
+  }
+  .sky-birds {
+    color: var(--muted);
+    opacity: 0.55;
+  }
+  .bird-route {
+    animation: cross-sky 55s linear var(--delay) infinite;
+  }
+  .bird-wings {
+    animation: wings 2.4s ease-in-out infinite alternate;
+  }
+  :global(html[data-theme='afternoon']) :global(.bamboo-scene) {
+    --bamboo-light: 1.03;
+    --bamboo-saturation: 1;
+  }
+  :global(html[data-theme='evening']) :global(.bamboo-scene) {
+    --bamboo-light: 1;
+    --bamboo-saturation: 1;
+    --night-details: 0.5;
+  }
+  :global(html[data-theme='night']) :global(.bamboo-scene) {
+    --bamboo-light: 0.85;
+    --bamboo-saturation: 0.78;
+    --night-details: 1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(html:not([data-theme])) :global(.bamboo-scene),
+    :global(html[data-theme='system']) :global(.bamboo-scene) {
+      --bamboo-light: 0.85;
+      --bamboo-saturation: 0.78;
+      --night-details: 1;
+    }
+  }
+  @keyframes cross-sky {
+    0% {
+      transform: translate(-80px, var(--altitude));
+      opacity: 0;
+    }
+    4%,
+    40% {
+      opacity: 0.7;
+    }
+    45%,
+    100% {
+      transform: translate(2250px, calc(var(--altitude) - 60px));
+      opacity: 0;
+    }
+  }
+  @keyframes wings {
+    from {
+      transform: scaleY(0.5);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes bamboo-firefly {
+    from {
+      transform: translate(0, 0);
+      opacity: 0.1;
+    }
+    40% {
+      opacity: 0.9;
+    }
+    to {
+      transform: translate(12px, -18px);
+      opacity: 0.15;
+    }
+  }
+  @media (max-width: 700px) {
+    .bamboo-stage {
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+      bottom: 0;
+    }
+  }
+</style>

@@ -1,22 +1,34 @@
 ---
 import { Image } from 'astro:assets';
-import morning from '../assets/ambient/morning.webp';
-import afternoon from '../assets/ambient/afternoon.webp';
-import evening from '../assets/ambient/evening.webp';
-import night from '../assets/ambient/night.webp';
+import morning from '../assets/ambient/branch-clean.webp';
+import flyingBird from '../assets/ambient/bird-flight.webp';
+import afternoon from '../assets/ambient/afternoon-framed.webp';
+import evening from '../assets/ambient/tea-clean.webp';
+import moon from '../assets/ambient/moon.webp';
 ---
 
-<div class="ambient-scene">
+<div class="ambient-scene" data-motion-viewport>
   <div class="scene scene-morning" aria-hidden="true">
     <Image
-      class="bird-art"
+      class="branch-art"
       src={morning}
       alt=""
-      widths={[240, 480, 720]}
-      sizes="(max-width: 1239px) 100px, 220px"
+      widths={[240, 480, 720, 1200]}
+      sizes="(max-width: 540px) 130px, (max-width: 1239px) 160px, (max-width: 1340px) 250px, (max-width: 1840px) calc((100vw - 800px) / 2 - 20px), 520px"
       loading="lazy"
       decoding="async"
     />
+    <div class="bird-flight">
+      <Image
+        class="flying-bird"
+        src={flyingBird}
+        alt=""
+        widths={[120, 240, 480]}
+        sizes="(max-width: 1239px) 44px, 140px"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
     <span class="sun-dust dust-one"></span>
     <span class="sun-dust dust-two"></span>
   </div>
@@ -25,8 +37,8 @@ import night from '../assets/ambient/night.webp';
       class="plant-art"
       src={afternoon}
       alt=""
-      widths={[240, 480, 720]}
-      sizes="(max-width: 1239px) 100px, 220px"
+      widths={[240, 480, 720, 1200]}
+      sizes="(max-width: 540px) 130px, (max-width: 1239px) 160px, (max-width: 1340px) 250px, (max-width: 1840px) calc((100vw - 800px) / 2 - 20px), 520px"
       loading="lazy"
       decoding="async"
     />
@@ -35,14 +47,14 @@ import night from '../assets/ambient/night.webp';
     <Image
       src={evening}
       alt=""
-      widths={[240, 480, 720]}
-      sizes="(max-width: 1239px) 100px, 220px"
+      widths={[240, 480, 720, 1200]}
+      sizes="(max-width: 540px) 130px, (max-width: 1239px) 160px, (max-width: 1340px) 250px, (max-width: 1840px) calc((100vw - 800px) / 2 - 20px), 520px"
       loading="lazy"
       decoding="async"
     />
     <svg
       class="steam-layer"
-      viewBox="0 0 240 320"
+      viewBox="0 0 1536 1024"
       fill="none"
       aria-hidden="true"
     >
@@ -54,49 +66,47 @@ import night from '../assets/ambient/night.webp';
       <g
         filter="url(#tea-softness)"
         stroke="#a48d6c"
-        stroke-width="2.5"
+        stroke-width="7"
         stroke-linecap="round"
       >
         <path
           class="steam steam-one"
-          d="M95 159c-24-26 24-40 1-65-9-11-6-21 2-33"
+          d="M625 438c-38-58 38-98 2-151-20-30-15-57 1-82"
         />
         <path
           class="steam steam-two"
-          d="M120 158c20-24-21-39-2-63 12-15 5-29 0-34"
+          d="M655 438c33-54-28-89-2-132 20-32 16-63 0-91"
         />
-        <path class="steam steam-three" d="M146 163c-20-21 11-33 1-51" />
+        <path class="steam steam-three" d="M850 330c-31-48 17-73 0-119" />
       </g>
     </svg>
   </div>
   <div class="scene scene-night" aria-hidden="true">
-    <span class="lamp-halo"></span>
+    <span class="moon-halo"></span>
     <Image
-      src={night}
+      src={moon}
       alt=""
-      widths={[240, 480, 720]}
-      sizes="(max-width: 1239px) 100px, 220px"
+      widths={[240, 480, 720, 1200]}
+      sizes="(max-width: 540px) 130px, (max-width: 1239px) 160px, (max-width: 1340px) 250px, (max-width: 1840px) calc((100vw - 800px) / 2 - 20px), 520px"
       loading="lazy"
       decoding="async"
     />
-    <span class="lamp-glass-light"></span>
-    <i class="firefly firefly-one"></i>
-    <i class="firefly firefly-two"></i>
   </div>
 </div>
 <style>
   .ambient-scene {
-    position: fixed;
-    right: 32px;
+    position: absolute;
+    right: -2px;
     top: 150px;
-    width: 220px;
-    height: 294px;
+    width: clamp(250px, calc((100vw - 800px) / 2 - 20px), 520px);
+    aspect-ratio: 3 / 2;
     z-index: 2;
   }
   .scene {
     position: absolute;
     inset: 0;
     display: none;
+    animation: arrive-from-edge 1.6s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
   .scene :global(img) {
     display: block;
@@ -106,6 +116,39 @@ import night from '../assets/ambient/night.webp';
   }
   .scene-morning {
     display: block;
+  }
+  .scene-morning :global(.branch-art) {
+    object-fit: fill;
+    transform-origin: 100% 75%;
+    animation: branch-breeze 7s ease-in-out infinite alternate;
+  }
+  .bird-flight {
+    position: absolute;
+    width: 29%;
+    aspect-ratio: 3 / 2;
+    left: 29%;
+    top: 28%;
+    animation: doyel-flight 18s ease-in-out infinite;
+  }
+  .bird-flight :global(.flying-bird) {
+    animation: wing-beat 0.9s ease-in-out infinite alternate;
+    transform-origin: 50% 70%;
+  }
+  .scene-afternoon {
+    left: 35%;
+    right: -16%;
+  }
+  .scene-afternoon :global(.plant-art) {
+    transform-origin: 100% 90%;
+    animation: foliage-breeze 5s ease-in-out infinite alternate;
+  }
+  .scene-evening :global(img) {
+    object-fit: fill;
+  }
+  .scene-evening .steam-layer {
+    inset: 0;
+    width: 100%;
+    height: 100%;
   }
   :global(html[data-theme='afternoon']) .scene-morning,
   :global(html[data-theme='evening']) .scene-morning,
@@ -127,14 +170,7 @@ import night from '../assets/ambient/night.webp';
       display: block;
     }
   }
-  .scene-morning :global(.bird-art) {
-    transform-origin: 50% 66%;
-    animation: bird-breathe 7s ease-in-out infinite;
-  }
-  .scene-afternoon :global(.plant-art) {
-    transform-origin: 52% 87%;
-    animation: foliage-breeze 8s ease-in-out infinite alternate;
-  }
+
   .sun-dust {
     position: absolute;
     width: 2px;
@@ -171,50 +207,34 @@ import night from '../assets/ambient/night.webp';
   .steam-three {
     animation-delay: -4.6s;
   }
-  .lamp-halo {
+  .moon-halo {
     position: absolute;
-    width: 160px;
-    height: 180px;
-    left: 44%;
-    top: 59%;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(
-      ellipse,
-      #ffc65d25,
-      #eab25b0a 48%,
-      transparent 72%
-    );
-    animation: lamplight 7s ease-in-out infinite alternate;
-  }
-  .lamp-glass-light {
-    position: absolute;
-    left: 30%;
-    top: 47%;
-    width: 28%;
-    height: 27%;
-    border-radius: 45%;
-    background: radial-gradient(ellipse, #ffdc8c33, transparent 70%);
-    mix-blend-mode: screen;
-    animation: lamplight 5s ease-in-out infinite alternate;
-  }
-  .firefly {
-    position: absolute;
-    width: 2px;
-    height: 2px;
+    width: 100%;
+    aspect-ratio: 1;
+    left: 0;
+    top: 0;
     border-radius: 50%;
-    background: #f5df9c;
-    box-shadow: 0 0 7px 2px #f2d17d33;
-    animation: firefly-drift 10s ease-in-out infinite alternate;
+    background: radial-gradient(
+      circle,
+      #f5eac50c,
+      #f5eac505 35%,
+      transparent 70%
+    );
+    animation: moon-glow 8s ease-in-out infinite alternate;
   }
-  .firefly-one {
-    left: 12%;
-    top: 65%;
+  .scene-night {
+    bottom: auto;
+    left: 42%;
+    right: 18%;
+    height: auto;
+    aspect-ratio: 1;
   }
-  .firefly-two {
-    left: 64%;
-    top: 81%;
-    animation-delay: -5s;
+  .scene-night :global(img) {
+    opacity: 0.82;
+    filter: drop-shadow(0 0 5px #eee7d40a);
+    animation: moon-drift 12s ease-in-out infinite alternate;
   }
+
   @keyframes bird-breathe {
     0%,
     65%,
@@ -222,15 +242,15 @@ import night from '../assets/ambient/night.webp';
       transform: scale(1);
     }
     75% {
-      transform: scale(1.007) rotate(-0.2deg);
+      transform: translate(-3px, -3px) rotate(-1deg);
     }
   }
   @keyframes foliage-breeze {
     from {
-      transform: skewX(-0.35deg) rotate(-0.3deg);
+      transform: rotate(-1deg);
     }
     to {
-      transform: skewX(0.45deg) rotate(0.35deg);
+      transform: rotate(1.2deg);
     }
   }
   @keyframes dust-float {
@@ -255,51 +275,90 @@ import night from '../assets/ambient/night.webp';
       opacity: 0;
     }
   }
-  @keyframes lamplight {
+
+  @keyframes arrive-from-edge {
     from {
-      opacity: 0.55;
+      transform: translateX(120%) rotate(3deg);
+      opacity: 0;
     }
     to {
+      transform: translateX(0) rotate(0);
       opacity: 1;
     }
   }
-  @keyframes firefly-drift {
+  @keyframes serving-balance {
     from {
-      transform: translate(0, 0);
-      opacity: 0.1;
-    }
-    40% {
-      opacity: 0.8;
+      transform: translateX(0) rotate(-0.6deg);
     }
     to {
-      transform: translate(-10px, -18px);
-      opacity: 0.2;
+      transform: translateX(-5px) rotate(0.6deg);
     }
   }
-  @media (max-width: 1370px) and (min-width: 1240px) {
-    .ambient-scene {
-      width: 170px;
-      height: 227px;
-      right: 16px;
+  @keyframes moon-drift {
+    to {
+      transform: translate(-3px, -5px);
+    }
+  }
+  @keyframes moon-glow {
+    from {
+      opacity: 0.4;
+    }
+    to {
+      opacity: 0.9;
+    }
+  }
+  @keyframes branch-breeze {
+    from {
+      transform: rotate(-0.3deg);
+    }
+    to {
+      transform: rotate(0.4deg);
+    }
+  }
+  @keyframes doyel-flight {
+    0%,
+    12%,
+    100% {
+      transform: translate(0, 0) rotate(-3deg);
+      opacity: 1;
+    }
+    25% {
+      transform: translate(-30px, -35px) rotate(-8deg);
+      opacity: 1;
+    }
+    38%,
+    65% {
+      transform: translate(-250px, -130px) scale(0.7);
+      opacity: 0;
+    }
+    68% {
+      transform: translate(100px, -90px) scale(0.75);
+      opacity: 0;
+    }
+    86% {
+      transform: translate(15px, -18px) rotate(4deg);
+      opacity: 1;
+    }
+  }
+  @keyframes wing-beat {
+    from {
+      transform: scaleY(0.82) rotate(-2deg);
+    }
+    to {
+      transform: scaleY(1) rotate(2deg);
     }
   }
   @media (max-width: 1239px) {
     .ambient-scene {
-      right: 16px;
-      top: 120px;
-      width: 100px;
-      height: 134px;
-    }
-    .lamp-halo {
-      width: 90px;
-      height: 100px;
+      top: 112px;
+      width: 160px;
+      right: -8px;
     }
   }
   @media (max-width: 540px) {
     .ambient-scene {
-      width: 64px;
-      height: 86px;
       top: 112px;
+      width: 130px;
     }
   }
   @media (prefers-reduced-motion: reduce) {

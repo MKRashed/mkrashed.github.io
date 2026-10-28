@@ -1,16 +1,26 @@
 ---
 import MotionScene from './MotionScene.astro';
 import AmbientScene from './AmbientScene.astro';
-import RooftopScene from './RooftopScene.astro';
 ---
 
 <MotionScene className="page-background">
-  <RooftopScene />
   <AmbientScene />
 </MotionScene>
 
 <style>
   :global(.page-background) {
-    height: 0;
+    position: absolute;
+    inset: 0 0 auto;
+    height: 560px;
+    overflow: hidden;
+    z-index: 2;
+  }
+</style>
+<style>
+  @media (max-width: 1239px) {
+    :global(.page-background) {
+      z-index: 4;
+      height: 220px;
+    }
   }
 </style>

@@ -1,5 +1,7 @@
 ---
 import { profile } from '../data/profile';
+import MotionScene from './MotionScene.astro';
+import BambooScene from './BambooScene.astro';
 ---
 
 <footer class="container reading-surface">
@@ -20,6 +22,9 @@ import { profile } from '../data/profile';
     <p>© {new Date().getFullYear()} · Built with Astro</p>
   </div>
 </footer>
+<MotionScene className="footer-scenery">
+  <BambooScene />
+</MotionScene>
 <style>
   footer {
     padding-block: 2.5rem;

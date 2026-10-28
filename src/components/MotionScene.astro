@@ -1,0 +1,52 @@
+---
+interface Props {
+  className: string;
+}
+const { className } = Astro.props;
+---
+
+<div
+  class:list={['motion-scene', className]}
+  data-motion-scene
+  data-paused="true"
+>
+  <slot />
+</div>
+<script>
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  document
+    .querySelectorAll<HTMLElement>('[data-motion-scene]')
+    .forEach((scene) => {
+      let visible = false;
+      const sync = () => {
+        scene.dataset.paused = String(
+          !visible || document.hidden || reduced.matches,
+        );
+      };
+      const observer = new IntersectionObserver((entries) => {
+        visible = entries[0].isIntersecting;
+        sync();
+      });
+      observer.observe(scene.querySelector('[data-motion-viewport]') ?? scene);
+      document.addEventListener('visibilitychange', sync);
+      reduced.addEventListener('change', sync);
+      window.addEventListener('pagehide', () => {
+        scene.dataset.paused = 'true';
+      });
+      window.addEventListener('pageshow', sync);
+    });
+</script>
+<style>
+  .motion-scene {
+    pointer-events: none;
+    user-select: none;
+  }
+  .motion-scene[data-paused='true'] :global(*) {
+    animation-play-state: paused !important;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .motion-scene :global(*) {
+      animation: none !important;
+    }
+  }
+</style>

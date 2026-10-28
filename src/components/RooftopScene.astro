@@ -1,0 +1,197 @@
+---
+import { Image } from 'astro:assets';
+import rooftops from '../assets/ambient/rooftops.webp';
+---
+
+<div class="rooftop-scene" data-motion-viewport>
+  <div class="rooftop-stage" aria-hidden="true">
+    <Image
+      class="rooftop-art"
+      src={rooftops}
+      alt=""
+      widths={[960, 1600, 2172]}
+      sizes="(max-width: 960px) 960px, 100vw"
+      loading="lazy"
+      decoding="async"
+    />
+    <svg
+      class="rooftop-atmosphere"
+      viewBox="0 0 2172 724"
+      fill="none"
+      aria-hidden="true"
+    >
+      <defs>
+        <radialGradient id="rooftop-window-glow">
+          <stop stop-color="#ffc35c" stop-opacity=".27" />
+          <stop offset=".4" stop-color="#ffbb50" stop-opacity=".1" />
+          <stop offset="1" stop-color="#ffbb50" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+      <g class="window-glow">
+        <ellipse
+          cx="1890"
+          cy="420"
+          rx="98"
+          ry="145"
+          fill="url(#rooftop-window-glow)"
+        />
+      </g>
+      <g class="rooftop-fireflies" fill="#f4d78e">
+        {[
+          [355, 560],
+          [480, 610],
+          [1600, 545],
+          [1700, 580],
+        ].map(([x, y], index) => (
+          <g
+            class="rooftop-firefly"
+            style={`--delay: ${-index * 3}s; --duration: ${10 + index * 2}s`}
+          >
+            <circle cx={x} cy={y} r="9" opacity=".06" />
+            <circle cx={x} cy={y} r="2" opacity=".7" />
+          </g>
+        ))}
+      </g>
+      <g class="sky-birds" fill="currentColor">
+        {[0, 1, 2].map((index) => (
+          <g
+            class="bird-route"
+            style={`--delay: ${-index * 9}s; --altitude: ${90 + index * 28}px`}
+          >
+            <g class="bird-wings">
+              <path d="M0 0Q-10-12-24-6-10-6 0 3 10-6 24-6 10-12 0 0Z" />
+            </g>
+          </g>
+        ))}
+      </g>
+    </svg>
+  </div>
+</div>
+<style>
+  :global(.rooftop-scene) {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    --rooftop-light: 0.85;
+    --rooftop-saturation: 0.7;
+    --night-details: 0;
+  }
+  .rooftop-stage {
+    position: absolute;
+    width: max(100%, 960px);
+    aspect-ratio: 3 / 1;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+  }
+  .rooftop-stage :global(.rooftop-art) {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: brightness(var(--rooftop-light)) saturate(var(--rooftop-saturation));
+  }
+  .rooftop-atmosphere {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .window-glow {
+    opacity: var(--night-details);
+    animation: window-warmth 11s ease-in-out infinite alternate;
+  }
+  .rooftop-fireflies {
+    opacity: var(--night-details);
+  }
+  .rooftop-firefly {
+    animation: rooftop-firefly var(--duration) ease-in-out var(--delay) infinite
+      alternate;
+  }
+  .sky-birds {
+    color: var(--muted);
+    opacity: 0.55;
+  }
+  .bird-route {
+    animation: cross-sky 55s linear var(--delay) infinite;
+  }
+  .bird-wings {
+    animation: wings 2.4s ease-in-out infinite alternate;
+  }
+  :global(html[data-theme='afternoon']) :global(.rooftop-scene) {
+    --rooftop-light: 0.95;
+    --rooftop-saturation: 0.78;
+  }
+  :global(html[data-theme='evening']) :global(.rooftop-scene) {
+    --rooftop-light: 0.8;
+    --rooftop-saturation: 0.68;
+    --night-details: 0.5;
+  }
+  :global(html[data-theme='night']) :global(.rooftop-scene) {
+    --rooftop-light: 0.68;
+    --rooftop-saturation: 0.6;
+    --night-details: 1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(html:not([data-theme])) :global(.rooftop-scene),
+    :global(html[data-theme='system']) :global(.rooftop-scene) {
+      --rooftop-light: 0.68;
+      --rooftop-saturation: 0.6;
+      --night-details: 1;
+    }
+  }
+  @keyframes cross-sky {
+    0% {
+      transform: translate(-80px, var(--altitude));
+      opacity: 0;
+    }
+    4%,
+    40% {
+      opacity: 0.7;
+    }
+    45%,
+    100% {
+      transform: translate(2250px, calc(var(--altitude) - 60px));
+      opacity: 0;
+    }
+  }
+  @keyframes wings {
+    from {
+      transform: scaleY(0.5);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+  @keyframes window-warmth {
+    from {
+      opacity: calc(var(--night-details) * 0.55);
+    }
+    to {
+      opacity: var(--night-details);
+    }
+  }
+  @keyframes rooftop-firefly {
+    from {
+      transform: translate(0, 0);
+      opacity: 0.1;
+    }
+    40% {
+      opacity: 0.9;
+    }
+    to {
+      transform: translate(12px, -18px);
+      opacity: 0.15;
+    }
+  }
+  @media (max-width: 700px) {
+    .rooftop-stage {
+      left: auto;
+      right: -32px;
+      transform: none;
+    }
+  }
+</style>

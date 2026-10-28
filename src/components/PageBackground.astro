@@ -1,0 +1,16 @@
+---
+import MotionScene from './MotionScene.astro';
+import AmbientScene from './AmbientScene.astro';
+import RooftopScene from './RooftopScene.astro';
+---
+
+<MotionScene className="page-background">
+  <RooftopScene />
+  <AmbientScene />
+</MotionScene>
+
+<style>
+  :global(.page-background) {
+    height: 0;
+  }
+</style>

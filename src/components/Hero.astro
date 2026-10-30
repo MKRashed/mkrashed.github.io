@@ -3,7 +3,11 @@ import { profile, experience } from '../data/profile';
 ---
 
 <section id="home" class="hero" aria-labelledby="hero-heading">
-  <p class="location">{profile.location}</p>
+  <p class="location">
+    <span class="location-light" aria-hidden="true"></span>
+    {profile.location}
+    <span class="local-time" data-dhaka-clock></span>
+  </p>
   <h1 id="hero-heading">
     {profile.name}
     <span aria-hidden="true">.</span>
@@ -28,14 +32,61 @@ import { profile, experience } from '../data/profile';
     </div>
   </div>
 </section>
+<script>
+  const clock = document.querySelector<HTMLElement>('[data-dhaka-clock]');
+  const format = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Dhaka',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  });
+  const update = () => {
+    if (clock) clock.textContent = format.format(new Date()).toUpperCase();
+  };
+  let timer: ReturnType<typeof setInterval>;
+  const sync = () => {
+    clearInterval(timer);
+    if (!document.hidden) {
+      update();
+      timer = setInterval(update, 60000);
+    }
+  };
+  document.addEventListener('visibilitychange', sync);
+  window.addEventListener('pagehide', () => clearInterval(timer));
+  window.addEventListener('pageshow', sync);
+  sync();
+</script>
 <style>
   .hero {
     position: relative;
     padding-block: 5.5rem 4rem;
   }
   .location {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
     color: var(--muted);
     font-size: 0.8rem;
+  }
+  .location-light {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 9%, transparent);
+    animation: location-breathe 4s ease-in-out infinite;
+  }
+  .local-time {
+    font: 0.62rem var(--mono);
+    letter-spacing: 0.02em;
+    opacity: 0.7;
+    padding-left: 0.65rem;
+    border-left: 1px solid var(--border);
+  }
+  @keyframes location-breathe {
+    50% {
+      box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent) 3%, transparent);
+    }
   }
   h1 {
     margin-block: 1rem;
@@ -77,8 +128,13 @@ import { profile, experience } from '../data/profile';
     text-decoration: none;
   }
   .link-row span {
+    display: inline-block;
+    transition: transform 0.25s;
     margin-left: 0.25rem;
     color: var(--accent);
+  }
+  .link-row a:hover span {
+    transform: translate(3px, -2px);
   }
   @media (max-width: 700px) {
     .hero {

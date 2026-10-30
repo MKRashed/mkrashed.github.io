@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PageBackground from '../components/PageBackground.astro';
+import PageMotion from '../components/PageMotion.astro';
 import { profile } from '../data/profile';
 interface Props {
   title?: string;
@@ -75,6 +76,16 @@ const socialImage = Astro.site
     )}
     <meta name="twitter:card" content="summary" />
     <script is:inline>
+      let motionPreference;
+      try {
+        motionPreference = localStorage.getItem('site-motion');
+      } catch {}
+      document.documentElement.dataset.motion =
+        motionPreference === 'on' ||
+        (motionPreference !== 'off' &&
+          !matchMedia('(prefers-reduced-motion: reduce)').matches)
+          ? 'on'
+          : 'off';
       try {
         const stored = localStorage.getItem('theme');
         const preference =
@@ -114,5 +125,6 @@ const socialImage = Astro.site
       <slot />
     </main>
     <Footer />
+    <PageMotion />
   </body>
 </html>

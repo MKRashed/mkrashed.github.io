@@ -1,0 +1,82 @@
+<div class="reading-progress" aria-hidden="true">
+  <span data-reading-progress></span>
+</div>
+<script>
+  const root = document.documentElement;
+  const animations = new Set<Animation>();
+  const entries = document.querySelectorAll<HTMLElement>(
+    '.hero > *, .page-heading > *, main > .section > *',
+  );
+  const observer = new IntersectionObserver(
+    (items) => {
+      for (const item of items) {
+        if (!item.isIntersecting) continue;
+        observer.unobserve(item.target);
+        if (root.dataset.motion === 'off') continue;
+        const element = item.target as HTMLElement;
+        const index = element.closest('.hero')
+          ? [...element.parentElement!.children].indexOf(element)
+          : 0;
+        const animation = element.animate(
+          [
+            { opacity: 0, transform: 'translateY(18px)' },
+            { opacity: 1, transform: 'translateY(0)' },
+          ],
+          {
+            duration: 850,
+            delay: index * 85,
+            easing: 'cubic-bezier(.2,.7,.25,1)',
+            fill: 'backwards',
+          },
+        );
+        animations.add(animation);
+        animation.finished
+          .catch(() => {})
+          .finally(() => animations.delete(animation));
+      }
+    },
+    { threshold: 0.08 },
+  );
+  entries.forEach((element) => observer.observe(element));
+  new MutationObserver(() => {
+    if (root.dataset.motion === 'off')
+      animations.forEach((animation) => animation.cancel());
+  }).observe(root, { attributes: true, attributeFilter: ['data-motion'] });
+  const progress = document.querySelector<HTMLElement>(
+    '[data-reading-progress]',
+  )!;
+  let queued = false;
+  const update = () => {
+    const distance = document.documentElement.scrollHeight - innerHeight;
+    progress.style.transform = `scaleX(${distance > 0 ? scrollY / distance : 0})`;
+    queued = false;
+  };
+  const schedule = () => {
+    if (!queued) {
+      queued = true;
+      requestAnimationFrame(update);
+    }
+  };
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+  window.addEventListener('pageshow', schedule);
+  schedule();
+</script>
+<style>
+  .reading-progress {
+    position: fixed;
+    inset: 0 0 auto;
+    height: 2px;
+    z-index: 60;
+    pointer-events: none;
+  }
+  .reading-progress span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--accent);
+    opacity: 0.6;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+</style>

@@ -8,7 +8,7 @@ const { project, headingLevel = 3 } = Astro.props;
 const Heading = headingLevel === 2 ? 'h2' : 'h3';
 ---
 
-<article>
+<article class="project-card">
   <div class="heading">
     <Heading class="project-title">
       <a href={`/projects/${project.slug}`}>
@@ -72,8 +72,19 @@ const Heading = headingLevel === 2 ? 'h2' : 'h3';
     text-transform: none;
   }
   article {
+    transition:
+      transform 0.3s ease,
+      background-color 0.3s ease;
     padding-block: 1.25rem;
     border-bottom: 1px solid var(--border);
+  }
+  @media (hover: hover) {
+    article:hover {
+      transform: translateX(6px);
+    }
+    article:hover .project-title span {
+      transform: translateX(5px);
+    }
   }
   article:first-child {
     padding-top: 0;
@@ -93,6 +104,7 @@ const Heading = headingLevel === 2 ? 'h2' : 'h3';
     text-decoration: none;
   }
   .project-title span {
+    transition: transform 0.3s ease;
     display: inline-block;
     margin-left: 0.5rem;
     color: var(--accent);

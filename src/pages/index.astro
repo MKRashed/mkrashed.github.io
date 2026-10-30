@@ -16,7 +16,10 @@ const posts = (await getPublishedPosts()).slice(0, 3);
 <BaseLayout>
   <Hero />
   <section id="work" class="section section-grid">
-    <SectionTitle title="Selected work" />
+    <SectionTitle
+      eyebrow="01 / Selected projects"
+      title="Work, out in the world."
+    />
     <div class="section-body">
       {featuredProjects.map((project) => (
         <ProjectCard project={project} />
@@ -27,11 +30,11 @@ const posts = (await getPublishedPosts()).slice(0, 3);
     </div>
   </section>
   <section id="skills" class="section section-grid">
-    <SectionTitle title="Technologies" />
+    <SectionTitle eyebrow="02 / The toolkit" title="Tools behind the work." />
     <SkillCard />
   </section>
   <section id="experience" class="section section-grid">
-    <SectionTitle title="Experience" />
+    <SectionTitle eyebrow="03 / The journey" title="A few chapters so far." />
     <div class="section-body">
       {experience.map((job) => (
         <ExperienceItem job={job} compact />

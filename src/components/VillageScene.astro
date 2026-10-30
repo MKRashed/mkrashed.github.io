@@ -1,0 +1,435 @@
+﻿---
+import { getImage } from 'astro:assets';
+import village from '../assets/ambient/village-landscape.webp';
+const landscape = await getImage({ src: village, width: 2172, format: 'webp' });
+// Wind is restricted to rice and tree canopies: houses, path and water stay still.
+const windMask = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="2172" height="724"><defs><filter id="soft"><feGaussianBlur stdDeviation="12"/></filter></defs><g fill="white" filter="url(#soft)"><path d="M0 406L1000 410 1120 470 1040 555 970 724H0Z"/><path d="M1245 540L1440 595 1800 575 2172 590V724H1120Z"/><ellipse cx="655" cy="297" rx="95" ry="70"/><ellipse cx="899" cy="245" rx="80" ry="45"/><ellipse cx="1500" cy="220" rx="82" ry="85"/><ellipse cx="1650" cy="310" rx="125" ry="58"/><ellipse cx="2140" cy="310" rx="95" ry="75"/></g></svg>`)}`;
+const flock = [
+  { delay: '-4s', duration: '28s', y: 175, size: 0.9 },
+  { delay: '-5.3s', duration: '28s', y: 205, size: 0.72 },
+  { delay: '-6.5s', duration: '28s', y: 160, size: 0.8 },
+];
+---
+
+<div class="village-scene" data-motion-viewport data-village aria-hidden="true">
+  <div class="village-caption">
+    <span class="landscape-kicker">A LITTLE CLOSER TO HOME</span>
+    <span class="landscape-title">A quiet corner of Bangladesh.</span>
+    <span class="landscape-time" data-village-time>
+      Dhaka, Bangladesh
+    </span>
+  </div>
+  <div class="village-stage">
+    <svg class="village-photo" viewBox="0 0 2172 724" fill="none">
+      <defs>
+        <filter
+          id="village-breeze"
+          x="-16"
+          y="-16"
+          width="2204"
+          height="756"
+          filterUnits="userSpaceOnUse"
+          color-interpolation-filters="sRGB"
+        >
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency=".014 .032"
+            numOctaves="1"
+            seed="8"
+            result="wind"
+          />
+          <feImage
+            href={windMask}
+            x="0"
+            y="0"
+            width="2172"
+            height="724"
+            result="leaves"
+          />
+          <feComposite
+            in="wind"
+            in2="leaves"
+            operator="in"
+            result="leaf-wind"
+          />
+          <feFlood flood-color="#808080" result="still" />
+          <feComposite
+            in="leaf-wind"
+            in2="still"
+            operator="over"
+            result="local-wind"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="local-wind"
+            scale="0"
+            xChannelSelector="R"
+            yChannelSelector="G"
+            data-village-wind
+          />
+        </filter>
+      </defs>
+      <image
+        href={landscape.src}
+        width="2172"
+        height="724"
+        filter="url(#village-breeze)"
+      />
+    </svg>
+    <svg class="village-life" viewBox="0 0 2172 724" fill="none">
+      <defs>
+        <clipPath id="pond-surface">
+          <path d="M1490 467Q1730 438 2172 459V550Q1910 565 1670 525Z" />
+        </clipPath>
+        <radialGradient id="window-glow">
+          <stop stop-color="#ffdba1" stop-opacity=".45" />
+          <stop offset="1" stop-color="#f2bf6c" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+      <g
+        class="pond-water"
+        clip-path="url(#pond-surface)"
+        stroke="currentColor"
+      >
+        {[0, 1, 2].map((i) => (
+          <g
+            class="water-ring"
+            style={`--ripple-delay:${-i * 2.3}s;--ripple-x:${1700 + i * 95}px;--ripple-y:${493 + i * 10}px`}
+          >
+            <ellipse cx={1700 + i * 95} cy={493 + i * 10} rx="25" ry="3.5" />
+            <ellipse cx={1700 + i * 95} cy={493 + i * 10} rx="17" ry="2.3" />
+          </g>
+        ))}
+      </g>
+      <g class="village-birds" fill="currentColor">
+        {flock.map((bird, i) => (
+          <g
+            class="flock-route"
+            style={`--flight-delay:${bird.delay};--flight-duration:${bird.duration};--flight-y:${bird.y}px`}
+          >
+            <g
+              class="flying-body"
+              style={`--wing-delay:${-i * 0.43}s;--bird-size:${bird.size}`}
+            >
+              <path d="M-7 1Q0-4 8 0L15 3 6 3-5 3-12 6-9 2Z" />
+              <g class="wing wing-near">
+                <path d="M0 1Q-8-11-24-17L-20-10-14-6-7 2Z" />
+              </g>
+              <g class="wing wing-far">
+                <path d="M0 1Q8-11 24-17L20-10 14-6 7 2Z" />
+              </g>
+            </g>
+          </g>
+        ))}
+      </g>
+      <g class="village-lights">
+        <ellipse cx="1295" cy="364" rx="33" ry="38" fill="url(#window-glow)" />
+        <path d="M1286 344h17v32h-17Z" fill="#e5bd77" opacity=".62" />
+        <path d="M1294 344v32m-8-18h17" stroke="#624f39" stroke-width="1.5" />
+        <ellipse cx="1059" cy="363" rx="19" ry="22" fill="url(#window-glow)" />
+        <path d="M1053 351h10v19h-10Z" fill="#e7b974" opacity=".35" />
+      </g>
+      <g class="village-fireflies" fill="#f3d78e">
+        {[
+          [640, 402],
+          [910, 423],
+          [1470, 408],
+          [1550, 475],
+          [1140, 487],
+          [1730, 566],
+          [1210, 581],
+        ].map(([x, y], i) => (
+          <g
+            class="firefly-drift"
+            style={`--firefly-delay:${-i * 1.7}s;--firefly-duration:${9 + (i % 3) * 2}s`}
+          >
+            <g class="firefly-glow">
+              <circle cx={x} cy={y} r="7" opacity=".09" />
+              <circle cx={x} cy={y} r="1.8" />
+            </g>
+          </g>
+        ))}
+      </g>
+    </svg>
+  </div>
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-village]').forEach((scene) => {
+    const motion = scene.closest<HTMLElement>('[data-motion-scene]')!;
+    const wind = scene.querySelector<SVGFEDisplacementMapElement>(
+      '[data-village-wind]',
+    )!;
+    const clock = scene.querySelector<HTMLElement>('[data-village-time]')!;
+    const format = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Asia/Dhaka',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+    let frame = 0,
+      last = 0,
+      lastClock = 0;
+    const tick = (time: number) => {
+      if (motion.dataset.paused === 'true') {
+        frame = 0;
+        return;
+      }
+      if (time - last > 1000 / 24) {
+        const t = time / 1000;
+        wind.setAttribute(
+          'scale',
+          (23 * (Math.sin(t * 0.9) + 0.35 * Math.sin(t * 1.9 + 1))).toFixed(2),
+        );
+        last = time;
+      }
+      if (time - lastClock > 30000) {
+        clock.textContent = `DHAKA · ${format.format(new Date()).toUpperCase()}`;
+        lastClock = time;
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    const sync = () => {
+      cancelAnimationFrame(frame);
+      wind.setAttribute('scale', '0');
+      clock.textContent = `DHAKA · ${format.format(new Date()).toUpperCase()}`;
+      if (motion.dataset.paused === 'false')
+        frame = requestAnimationFrame(tick);
+    };
+    new MutationObserver(sync).observe(motion, {
+      attributes: true,
+      attributeFilter: ['data-paused'],
+    });
+    window.addEventListener('pagehide', () => cancelAnimationFrame(frame));
+    sync();
+  });
+</script>
+<style>
+  .village-scene {
+    --scene-brightness: 1;
+    --scene-saturation: 0.92;
+    --scene-warmth: 0;
+    --light-level: 0;
+    --insect-level: 0;
+    position: relative;
+    width: 100%;
+    height: calc(max(100vw, 1000px) / 3 + 110px);
+    overflow: hidden;
+    background: var(--bg);
+  }
+  .village-stage {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: max(100%, 1000px);
+    aspect-ratio: 3 / 1;
+    transform: translateX(-50%);
+  }
+  .village-photo,
+  .village-life {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .village-photo {
+    filter: brightness(var(--scene-brightness))
+      saturate(var(--scene-saturation)) sepia(var(--scene-warmth));
+    mask-image: linear-gradient(to bottom, transparent, #000 30%);
+  }
+  .village-scene::after {
+    content: '';
+    position: absolute;
+    inset: 100px 0 0;
+    background: linear-gradient(to bottom, var(--bg), transparent 38%);
+    pointer-events: none;
+  }
+  .village-caption {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    padding-top: 2.5rem;
+  }
+  .landscape-kicker {
+    font: 0.58rem var(--mono);
+    letter-spacing: 0.18em;
+    color: var(--muted);
+  }
+  .landscape-title {
+    font: clamp(1.15rem, 2.1vw, 1.65rem) var(--serif);
+    letter-spacing: -0.025em;
+  }
+  .landscape-time {
+    font: 0.6rem var(--mono);
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+  .village-birds {
+    color: var(--muted);
+    opacity: 0.75;
+  }
+  .flock-route {
+    animation: flock-crossing var(--flight-duration) linear var(--flight-delay)
+      infinite;
+  }
+  .flying-body {
+    transform: scale(var(--bird-size));
+  }
+  .wing {
+    transform-origin: 0 1px;
+    animation: bird-wingbeat 1.7s var(--wing-delay) infinite;
+  }
+  .wing-far {
+    --wing-side: -1;
+    opacity: 0.65;
+  }
+  .wing-near {
+    --wing-side: 1;
+  }
+  .pond-water {
+    color: #d8d8ba;
+    opacity: 0.65;
+    stroke-width: 1.7;
+  }
+  .water-ring {
+    transform-origin: var(--ripple-x) var(--ripple-y);
+    animation: pond-ripple 7s linear var(--ripple-delay) infinite;
+  }
+  .village-lights {
+    opacity: var(--light-level);
+    transition: opacity 1.5s;
+  }
+  .village-fireflies {
+    opacity: var(--insect-level);
+    transition: opacity 1s;
+  }
+  .firefly-drift {
+    animation: firefly-wander var(--firefly-duration) ease-in-out
+      var(--firefly-delay) infinite;
+  }
+  .firefly-glow {
+    animation: firefly-blink 4.8s ease-in-out var(--firefly-delay) infinite;
+  }
+  :global(html[data-theme='afternoon']) .village-scene {
+    --scene-warmth: 0.08;
+  }
+  :global(html[data-theme='evening']) .village-scene {
+    --scene-brightness: 0.86;
+    --scene-saturation: 0.82;
+    --scene-warmth: 0.24;
+    --light-level: 0.65;
+    --insect-level: 0.65;
+  }
+  :global(html[data-theme='night']) .village-scene {
+    --scene-brightness: 0.42;
+    --scene-saturation: 0.6;
+    --light-level: 1;
+    --insect-level: 1;
+  }
+  :global(html[data-theme='night']) .village-birds {
+    display: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(html:not([data-theme])) .village-scene,
+    :global(html[data-theme='system']) .village-scene {
+      --scene-brightness: 0.42;
+      --scene-saturation: 0.6;
+      --light-level: 1;
+      --insect-level: 1;
+    }
+    :global(html:not([data-theme])) .village-birds,
+    :global(html[data-theme='system']) .village-birds {
+      display: none;
+    }
+  }
+  @keyframes flock-crossing {
+    0% {
+      transform: translate(-80px, var(--flight-y));
+      opacity: 0;
+    }
+    7% {
+      opacity: 1;
+    }
+    40% {
+      transform: translate(900px, calc(var(--flight-y) - 55px));
+      opacity: 1;
+    }
+    75% {
+      opacity: 1;
+    }
+    88%,
+    100% {
+      transform: translate(2300px, calc(var(--flight-y) + 25px));
+      opacity: 0;
+    }
+  }
+  @keyframes bird-wingbeat {
+    0%,
+    24%,
+    48%,
+    100% {
+      transform: rotate(calc(-23deg * var(--wing-side))) scaleY(0.8);
+    }
+    8%,
+    32%,
+    56% {
+      transform: rotate(calc(30deg * var(--wing-side))) scaleY(0.65);
+    }
+    68%,
+    88% {
+      transform: rotate(calc(2deg * var(--wing-side))) scaleY(0.5);
+    }
+  }
+  @keyframes pond-ripple {
+    0% {
+      transform: scale(0.3);
+      opacity: 0;
+    }
+    20% {
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(3.4, 1.8);
+      opacity: 0;
+    }
+  }
+  @keyframes firefly-wander {
+    0%,
+    100% {
+      transform: translate(0);
+    }
+    35% {
+      transform: translate(15px, -20px);
+    }
+    70% {
+      transform: translate(-12px, -9px);
+    }
+  }
+  @keyframes firefly-blink {
+    0%,
+    100% {
+      opacity: 0.15;
+    }
+    30%,
+    65% {
+      opacity: 0.9;
+    }
+    48% {
+      opacity: 0.35;
+    }
+  }
+  @media (max-width: 540px) {
+    .village-caption {
+      padding-top: 1.75rem;
+    }
+    .village-scene {
+      height: 420px;
+    }
+    .landscape-kicker {
+      font-size: 0.52rem;
+    }
+  }
+</style>

@@ -1,4 +1,18 @@
 @layer reset, base, utilities;
+@media (prefers-reduced-motion: no-preference) {
+  :root,
+  body,
+  header,
+  footer,
+  .theme-options,
+  .theme-option,
+  .theme-picker summary {
+    transition:
+      background-color 700ms ease,
+      color 700ms ease,
+      border-color 700ms ease;
+  }
+}
 @layer reset {
   *,
   *::before,
@@ -326,13 +340,11 @@
       padding-block: 2.5rem;
     }
   }
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      scroll-behavior: auto !important;
-      transition: none !important;
-      animation: none !important;
-    }
+  :root[data-motion='off'] *,
+  :root[data-motion='off'] *::before,
+  :root[data-motion='off'] *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation-play-state: paused !important;
   }
 }

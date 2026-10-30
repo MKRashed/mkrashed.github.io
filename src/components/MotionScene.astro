@@ -13,14 +13,15 @@ const { className } = Astro.props;
   <slot />
 </div>
 <script>
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   document
     .querySelectorAll<HTMLElement>('[data-motion-scene]')
     .forEach((scene) => {
       let visible = false;
       const sync = () => {
         scene.dataset.paused = String(
-          !visible || document.hidden || reduced.matches,
+          !visible ||
+            document.hidden ||
+            document.documentElement.dataset.motion === 'off',
         );
       };
       const observer = new IntersectionObserver((entries) => {
@@ -29,7 +30,10 @@ const { className } = Astro.props;
       });
       observer.observe(scene.querySelector('[data-motion-viewport]') ?? scene);
       document.addEventListener('visibilitychange', sync);
-      reduced.addEventListener('change', sync);
+      new MutationObserver(sync).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-motion'],
+      });
       window.addEventListener('pagehide', () => {
         scene.dataset.paused = 'true';
       });
@@ -44,9 +48,7 @@ const { className } = Astro.props;
   .motion-scene[data-paused='true'] :global(*) {
     animation-play-state: paused !important;
   }
-  @media (prefers-reduced-motion: reduce) {
-    .motion-scene :global(*) {
-      animation: none !important;
-    }
+  :global(html[data-motion='off']) .motion-scene :global(*) {
+    animation-play-state: paused !important;
   }
 </style>

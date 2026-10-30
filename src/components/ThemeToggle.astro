@@ -1,4 +1,5 @@
 ---
+import MotionToggle from './MotionToggle.astro';
 const options = [
   {
     value: 'system',
@@ -9,25 +10,25 @@ const options = [
   {
     value: 'morning',
     label: 'Morning',
-    hint: 'Light',
+    hint: 'Doyel & daylight',
     path: 'M3 17h18M5 21h14M7 13a5 5 0 0 1 10 0M12 2v3M3 7l2 2m14 0 2-2',
   },
   {
     value: 'afternoon',
     label: 'Afternoon',
-    hint: 'Warm',
+    hint: 'Kites over the village',
     path: 'M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0',
   },
   {
     value: 'evening',
     label: 'Evening',
-    hint: 'Sepia',
+    hint: 'Lantern light',
     path: 'M3 17h18M5 21h14M7 13a5 5 0 0 1 10 0M12 3v5m-2-2 2 2 2-2M3 7l2 2m14 0 2-2',
   },
   {
     value: 'night',
     label: 'Night',
-    hint: 'Dark',
+    hint: 'Moonlit countryside',
     path: 'M20.9 13a9 9 0 0 1-9.9-9.9A9 9 0 1 0 20.9 13Z',
   },
 ];
@@ -90,6 +91,7 @@ const options = [
         </span>
       </label>
     ))}
+    <MotionToggle />
   </fieldset>
 </details>
 <script>
@@ -145,6 +147,7 @@ const options = [
         localStorage.setItem('theme', input.value);
       } catch {}
       syncTheme();
+      picker.open = false;
     });
     // Keep the native radio group's arrow-key navigation available while open.
     picker.addEventListener('keydown', (event) => {
